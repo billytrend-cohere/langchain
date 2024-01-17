@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 def _get_docs(response: Any) -> List[Document]:
     docs = [
-        Document(page_content=doc["snippet"], metadata=doc)
+        Document(page_content=doc["snippet"] or doc["text"], metadata=doc)
         for doc in response.generation_info["documents"]
     ]
     docs.append(
@@ -45,8 +45,6 @@ class CohereRagRetriever(BaseRetriever):
     When specified, the model's reply will be enriched with information found by
     querying each of the connectors (RAG). These will be returned as langchain
     documents.
-
-    Currently only accepts {"id": "web-search"}.
     """
 
     llm: BaseChatModel
