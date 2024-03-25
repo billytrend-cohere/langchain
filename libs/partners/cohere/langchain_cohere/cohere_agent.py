@@ -28,7 +28,7 @@ def create_cohere_tools_agent(
             # Intermediate steps are in tool results.
             # Edit below to change the prompt parameters.
             input=lambda x: prompt.format_messages(
-                input=x["input"], agent_scratchpad=""
+                input=x["input"], agent_scratchpad=[]
             ),
             tools=lambda x: format_to_cohere_tools(tools, x["intermediate_steps"]),
             tool_results=lambda x: format_to_cohere_tools_messages(
@@ -104,7 +104,7 @@ class CohereToolsAgentOutputParser(MultiActionAgentOutputParser):
         if result[0].message.additional_kwargs["tool_calls"]:
             return [
                 AgentAction(
-                    tool=tool["name"], tool_input=tool["parameters"], log=tool["name"]
+                    tool=tool.name, tool_input=tool.parameters, log=tool.name
                 )
                 for tool in result[0].message.additional_kwargs["tool_calls"]
             ]
