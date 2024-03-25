@@ -66,9 +66,14 @@ def get_cohere_chat_request(
             "snippet": doc.page_content,
             "id": doc.metadata.get("id") or f"doc-{str(i)}",
         }
-        for i, doc in enumerate(additional_kwargs.get("documents", []) or [])
+        for i, doc in enumerate(additional_kwargs.get("documents", []))
     ]
-    connectors = [{"id": connector} for connector in additional_kwargs.get("connectors", []) or []]
+    if not documents:
+        documents = None
+
+    connectors = [{"id": connector} for connector in additional_kwargs.get("connectors", [])]
+    if not connectors:
+        connectors = None
 
     # by enabling automatic prompt truncation, the probability of request failure is
     # reduced with minimal impact on response quality
